@@ -1,0 +1,9 @@
+[package]
+name = "alamo2radarr"
+version = "0.1.0"
+authors = ["Spike Grobstein <me@spike.cx>"]
+edition = "2018"
+
+[dependencies]
+alamo_movies = { git = "https://github.com/spikegrobstein/alamo-movies-rust.git", branch = "make-lib" }
+radarr = { git = "https://github.com/spikegrobstein/radarr-rs" }
