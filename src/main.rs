@@ -3,12 +3,14 @@ use alamo2radarr::*;
 
 
 fn main() {
-    let config = radarr::Config::new_from_env().unwrap();
-    let client = radarr::Client::new(config);
+    let config = radarr::Config::new_from_env();
+    let client = radarr::Client::new(config).unwrap();
 
-    let health = client.health().expect("Failed to do radarr healthcheck");
+    let _health = client.health().expect("Failed to do radarr healthcheck");
+
     let root_folder_path = client.root_folder()
-        .expect("Failed to get root folder");
+        .expect("Failed to get root folder")
+        .data;
 
     let root_folder_path = &root_folder_path[0].path;
 
@@ -21,9 +23,10 @@ fn main() {
 
     // now search radarr
     for film in films {
-        if let Ok(Some(results)) = client.search(&film.name) {
+        if let Ok(results) = client.search(&film.name) {
+            let results = results.data;
             let results_count = results.len();
-            let best_results = match best_matches(&film.name, results) {
+            let best_results = match best_matches(&film.name, *results) {
                 Some(r) => r,
                 None => {
                     eprintln!("Found no results for {}", film.name);
