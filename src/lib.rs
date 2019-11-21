@@ -22,6 +22,8 @@ pub fn fetch_all_alamo_films() -> Result<Vec<Film>, Box<dyn Error>> {
             film.show_type.to_lowercase() == "terror tuesday"
                 || film.show_type.to_lowercase() == "weird wednesday"
                 || film.show_type.to_lowercase() == "video vortex"
+                || film.show_type.to_lowercase() == "horror show"
+                || film.show_type.to_lowercase() == "film club"
         })
         .collect();
 
