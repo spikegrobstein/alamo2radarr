@@ -5,5 +5,5 @@ authors = ["Spike Grobstein <me@spike.cx>"]
 edition = "2018"
 
 [dependencies]
-alamo_movies = { git = "https://github.com/spikegrobstein/alamo-movies-rust.git", branch = "make-lib" }
+alamo_movies = { git = "https://github.com/spikegrobstein/alamo-movies-rust.git", branch = "main" }
 radarr = { git = "https://github.com/spikegrobstein/radarr-rs" }

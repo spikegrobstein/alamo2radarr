@@ -1,6 +1,4 @@
-use radarr;
 use alamo2radarr::*;
-
 
 fn main() {
     let config = radarr::Config::new_from_env();

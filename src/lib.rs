@@ -1,8 +1,5 @@
 use std::error::Error;
 
-use radarr;
-use alamo_movies;
-
 use alamo_movies::film::Film;
 use alamo_movies::cinema::Cinema;
 
@@ -10,14 +7,13 @@ pub fn fetch_all_alamo_films() -> Result<Vec<Film>, Box<dyn Error>> {
     let cinemas = Cinema::list();
 
     let films = cinemas.iter()
-        .map(|cinema| {
+        .flat_map(|cinema| {
             eprintln!("Fetching cinema data for {}", cinema.slug);
             let data = Cinema::get_calendar_data(&cinema.id).expect("Failed to get data");
             let (_cinema, films) = Cinema::from_calendar_data(&data).expect("Failed to get films");
 
             films
         })
-        .flatten()
         .filter(|film| {
             film.show_type.to_lowercase() == "terror tuesday"
                 || film.show_type.to_lowercase() == "weird wednesday"
@@ -39,7 +35,7 @@ pub fn best_matches(term: &str, results: Vec<radarr::SearchResult>) -> Option<Ve
         })
         .collect();
 
-    if matches.len() == 0 {
+    if matches.is_empty() {
         return None;
     }
 
