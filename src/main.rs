@@ -15,24 +15,24 @@ fn main() {
     eprintln!("Radarr online! (root folder: {})", root_folder_path);
 
     // now let's fetch all of the alamo movies
-    let films = fetch_all_alamo_films().expect("Failed to get films from ADC");
+    let presentations = fetch_all_alamo_films().expect("Failed to get films from ADC");
 
-    eprintln!("Got back {} films", films.len());
+    eprintln!("Got back {} films", presentations.len());
 
     // now search radarr
-    for film in films {
-        if let Ok(results) = client.search(&film.name) {
+    for pres in presentations {
+        if let Ok(results) = client.search(&pres.show.title) {
             let results = results.data;
             let results_count = results.len();
-            let best_results = match best_matches(&film.name, *results) {
+            let best_results = match best_matches(&pres.show.title, *results) {
                 Some(r) => r,
                 None => {
-                    eprintln!("Found no results for {}", film.name);
+                    eprintln!("Found no results for {}", pres.show.title);
                     continue;
                 },
             };
 
-            eprintln!("Got {}/{} results for {}", best_results.len(), results_count, film.name);
+            eprintln!("Got {}/{} results for {}", best_results.len(), results_count, pres.show.title);
 
             for result in best_results {
                 let mut payload = match radarr::AddMoviePayload::from_movie_response(&result) {
@@ -47,15 +47,15 @@ fn main() {
                 payload.set_root_folder_path(root_folder_path);
 
                 match client.add_movie(&payload) {
-                    Ok(_) => eprintln!("Added movie: {}", film.name),
+                    Ok(_) => eprintln!("Added movie: {}", pres.show.title),
                     Err(error) => {
-                        eprintln!("Failed to add movie: {}: {}", film.name, error);
+                        eprintln!("Failed to add movie: {}: {}", pres.show.title, error);
                         continue;
                     }
                 }
             }
         } else {
-            eprintln!("Failed to search for {}", film.name);
+            eprintln!("Failed to search for {}", pres.show.title);
         }
     }
 }
