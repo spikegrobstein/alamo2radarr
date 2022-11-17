@@ -4,7 +4,7 @@ fn main() {
     let config = radarr::Config::new_from_env();
     let client = radarr::Client::new(config).unwrap();
 
-    let _health = client.health().expect("Failed to do radarr healthcheck");
+    // let _health = client.health().expect("Failed to do radarr healthcheck");
 
     let root_folder_path = client.root_folder()
         .expect("Failed to get root folder")
@@ -45,6 +45,9 @@ fn main() {
                 payload.set_search_for_movie(true);
                 payload.set_monitored(true);
                 payload.set_root_folder_path(root_folder_path);
+                payload.quality_profile_id = 1;
+
+                // eprintln!("add movie payload: {:#?}", payload);
 
                 match client.add_movie(&payload) {
                     Ok(_) => eprintln!("Added movie: {}", pres.show.title),

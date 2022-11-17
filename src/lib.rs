@@ -30,8 +30,8 @@ pub fn best_matches(term: &str, results: Vec<radarr::SearchResult>) -> Option<Ve
     let matches: Vec<radarr::SearchResult> = results.into_iter()
         .filter(|result| {
             result.title.to_lowercase() == term.to_lowercase() 
-                || result.alternative_titles.iter()
-                    .any(|title| title.to_lowercase() == term.to_lowercase())
+                || result.alternate_titles.iter()
+                    .any(|title| title.title.to_lowercase() == term.to_lowercase())
         })
         .collect();
 
