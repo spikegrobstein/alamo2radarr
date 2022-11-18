@@ -13,6 +13,8 @@ pub fn fetch_all_alamo_films() -> Result<Vec<Presentation>, Box<dyn Error>> {
         "horror-show",
         "film-club",
         "world-of-animation",
+        "graveyard-shift",
+        "psycho-cinema",
     ];
 
     let films = markets.iter()
