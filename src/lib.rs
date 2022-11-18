@@ -3,6 +3,14 @@ use std::error::Error;
 use alamo_movies::presentation::Presentation;
 use alamo_movies::market::{Market, MarketApiResponse};
 
+const COLLECTIONS: [&str; 5] = [
+    "terror-tuesday",
+    "weird-wednesday",
+    "video-vortex",
+    "horror-show",
+    "film-club",
+];
+
 pub fn fetch_all_alamo_films() -> Result<Vec<Presentation>, Box<dyn Error>> {
     let markets = Market::list()?;
 
@@ -15,11 +23,11 @@ pub fn fetch_all_alamo_films() -> Result<Vec<Presentation>, Box<dyn Error>> {
             resp.data.presentations
         })
         .filter(|pres| {
-            pres.primary_collection_slug == Some("terror-tuesday".into())
-                || pres.primary_collection_slug == Some("weird-wednesday".into())
-                || pres.primary_collection_slug == Some("video-vortex".into())
-                || pres.primary_collection_slug == Some("horror-show".into())
-                || pres.primary_collection_slug == Some("film-club".into())
+            if let Some(ref collection) = pres.primary_collection_slug {
+                COLLECTIONS.iter().any(|c| c == collection)
+            } else {
+                false
+            }
         })
         .collect();
 
