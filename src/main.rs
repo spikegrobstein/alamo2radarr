@@ -21,18 +21,19 @@ fn main() {
 
     // now search radarr
     for pres in presentations {
-        if let Ok(results) = client.search(&pres.show.title) {
+        let title = clean_title(&pres.show.title);
+        if let Ok(results) = client.search(&title) {
             let results = results.data;
             let results_count = results.len();
-            let best_results = match best_matches(&pres.show.title, *results) {
+            let best_results = match best_matches(&title, *results) {
                 Some(r) => r,
                 None => {
-                    eprintln!("Found no results for {}", pres.show.title);
+                    eprintln!("Found no results for {}", title);
                     continue;
                 },
             };
 
-            eprintln!("Got {}/{} results for {}", best_results.len(), results_count, pres.show.title);
+            eprintln!("Got {}/{} results for {}", best_results.len(), results_count, title);
 
             for result in best_results {
                 let mut payload = match radarr::AddMoviePayload::from_movie_response(&result) {
@@ -50,15 +51,15 @@ fn main() {
                 // eprintln!("add movie payload: {:#?}", payload);
 
                 match client.add_movie(&payload) {
-                    Ok(_) => eprintln!("Added movie: {}", pres.show.title),
+                    Ok(_) => eprintln!("Added movie: {}", title),
                     Err(error) => {
-                        eprintln!("Failed to add movie: {}: {}", pres.show.title, error);
+                        eprintln!("Failed to add movie: {}: {}", title, error);
                         continue;
                     }
                 }
             }
         } else {
-            eprintln!("Failed to search for {}", pres.show.title);
+            eprintln!("Failed to search for {}", title);
         }
     }
 }

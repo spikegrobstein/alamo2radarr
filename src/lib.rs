@@ -3,6 +3,23 @@ use std::error::Error;
 use alamo_movies::presentation::Presentation;
 use alamo_movies::market::{Market, MarketApiResponse};
 
+pub fn clean_title(title: &str) -> String {
+    let suffixes = vec![
+        " (Dubbed)",
+        " (Subtitled)",
+    ];
+
+    let mut title = title;
+
+    for suffix in suffixes {
+        if let Some(stripped_title) = title.strip_suffix(suffix) {
+            title = stripped_title;
+        }
+    }
+
+    title.to_owned()
+}
+
 pub fn fetch_all_alamo_films() -> Result<Vec<Presentation>, Box<dyn Error>> {
     let markets = Market::list()?;
 
@@ -27,6 +44,7 @@ pub fn fetch_all_alamo_films() -> Result<Vec<Presentation>, Box<dyn Error>> {
         })
         .filter(|pres| {
             if let Some(ref collection) = pres.primary_collection_slug {
+                eprintln!("checking collection type: {collection}");
                 collections.iter().any(|c| c == collection)
             } else {
                 false
