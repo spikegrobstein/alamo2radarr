@@ -6,7 +6,8 @@ fn main() {
 
     // let _health = client.health().expect("Failed to do radarr healthcheck");
 
-    let root_folder_path = client.root_folder()
+    let root_folder_path = client
+        .root_folder()
         .expect("Failed to get root folder")
         .data;
 
@@ -22,45 +23,53 @@ fn main() {
     // now search radarr
     for pres in presentations {
         let title = clean_title(&pres.show.title);
-        if let Ok(results) = client.search(&title) {
-            let results = results.data;
-            let results_count = results.len();
-            let best_results = match best_matches(&title, *results) {
-                Some(r) => r,
-                None => {
-                    eprintln!("Found no results for {}", title);
-                    continue;
-                },
-            };
-
-            eprintln!("Got {}/{} results for {}", best_results.len(), results_count, title);
-
-            for result in best_results {
-                let mut payload = match radarr::AddMoviePayload::from_movie_response(&result) {
-                    Some(payload) => payload,
+        match client.search(&title) {
+            Ok(results) => {
+                let results = results.data;
+                let results_count = results.len();
+                let best_results = match best_matches(&title, *results) {
+                    Some(r) => r,
                     None => {
-                        eprintln!("Cannot create movie payload.");
+                        eprintln!("Found no results for {}", title);
                         continue;
                     }
                 };
-                payload.set_search_for_movie(true);
-                payload.set_monitored(true);
-                payload.set_root_folder_path(root_folder_path);
-                payload.quality_profile_id = 1;
 
-                // eprintln!("add movie payload: {:#?}", payload);
+                eprintln!(
+                    "Got {}/{} results for {}",
+                    best_results.len(),
+                    results_count,
+                    title
+                );
 
-                match client.add_movie(&payload) {
-                    Ok(_) => eprintln!("Added movie: {}", title),
-                    Err(error) => {
-                        eprintln!("Failed to add movie: {}: {}", title, error);
-                        continue;
+                for result in best_results {
+                    let mut payload = match radarr::AddMoviePayload::from_movie_response(&result) {
+                        Some(payload) => payload,
+                        None => {
+                            eprintln!("Cannot create movie payload.");
+                            continue;
+                        }
+                    };
+                    payload.set_search_for_movie(true);
+                    payload.set_monitored(true);
+                    payload.set_root_folder_path(root_folder_path);
+                    payload.quality_profile_id = 1;
+
+                    // eprintln!("add movie payload: {:#?}", payload);
+
+                    match client.add_movie(&payload) {
+                        Ok(_) => eprintln!("Added movie: {}", title),
+                        Err(error) => {
+                            eprintln!("Failed to add movie: {}: {}", title, error);
+                            continue;
+                        }
                     }
                 }
             }
-        } else {
-            eprintln!("Failed to search for {}", title);
+            Err(err) => {
+                eprintln!("Failed to search for {}", title);
+                eprintln!("{}", err);
+            }
         }
     }
 }
-
