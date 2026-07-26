@@ -1,0 +1,41 @@
+kind: pipeline
+type: docker
+name: test-and-publish
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+  - name: test
+    image: rust:1.97.1-alpine3.22
+    commands:
+      - apk add --no-cache musl-dev
+      - rustup component add clippy rustfmt
+      - cargo fmt --all --check
+      - cargo clippy --workspace --all-targets --locked -- -D warnings
+      - cargo test --workspace --locked
+
+  - name: publish
+    image: plugins/docker:2
+    settings:
+      registry: docker.home.spike.cx
+      repo: docker.home.spike.cx/alamo2radarr
+      username:
+        from_secret: docker_registry_username
+      password:
+        from_secret: docker_registry_password
+      dockerfile: Dockerfile
+      tags:
+        - latest
+        - ${DRONE_COMMIT_SHA:0:12}
+    when:
+      branch:
+        - main
+      event:
+        - push
+
+trigger:
+  event:
+    - push
+    - pull_request
