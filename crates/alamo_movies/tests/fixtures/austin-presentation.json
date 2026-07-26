@@ -1,0 +1,20 @@
+{
+  "data": {
+    "presentation": {
+      "slug": "terror-tuesday-michael-manns-manhunter-the-final-cut",
+      "show": {
+        "slug": "michael-manns-manhunter-the-final-cut",
+        "title": "Michael Mann's Manhunter: The Final Cut",
+        "certification": "R",
+        "nationalReleaseDateUtc": "1986-01-01",
+        "imdbId": null,
+        "runtimeMinutes": 122,
+        "directors": []
+      },
+      "primaryCollectionSlug": "terror-tuesday",
+      "formatSlugs": [
+        "2d-digital"
+      ]
+    }
+  }
+}
