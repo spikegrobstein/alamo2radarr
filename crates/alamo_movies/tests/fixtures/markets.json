@@ -1,0 +1,300 @@
+{
+  "data": {
+    "marketSummary": null,
+    "cinemaSummaries": [],
+    "marketSummaries": [
+      {
+        "id": "0000",
+        "slug": "austin",
+        "name": "Austin",
+        "marketStatus": "OPEN",
+        "subscriptionProgramStatus": "OPEN",
+        "isOpenForBusiness": true,
+        "isFoodPreorderRequired": false,
+        "foodPreorderAvailability": "NONE",
+        "isMaxSafetyOperation": false
+      },
+      {
+        "id": "2900",
+        "slug": "boston",
+        "name": "Boston",
+        "marketStatus": "OPEN",
+        "subscriptionProgramStatus": "OPEN",
+        "isOpenForBusiness": true,
+        "isFoodPreorderRequired": false,
+        "foodPreorderAvailability": "NONE",
+        "isMaxSafetyOperation": false
+      },
+      {
+        "id": "2400",
+        "slug": "charlottesville",
+        "name": "Charlottesville",
+        "marketStatus": "OPEN",
+        "subscriptionProgramStatus": "OPEN",
+        "isOpenForBusiness": true,
+        "isFoodPreorderRequired": false,
+        "foodPreorderAvailability": "NONE",
+        "isMaxSafetyOperation": false
+      },
+      {
+        "id": "1800",
+        "slug": "chicago",
+        "name": "Chicago",
+        "marketStatus": "OPEN",
+        "subscriptionProgramStatus": "OPEN",
+        "isOpenForBusiness": true,
+        "isFoodPreorderRequired": false,
+        "foodPreorderAvailability": "NONE",
+        "isMaxSafetyOperation": false
+      },
+      {
+        "id": "2000",
+        "slug": "corpus-christi",
+        "name": "Corpus Christi",
+        "marketStatus": "OPEN",
+        "subscriptionProgramStatus": "OPEN",
+        "isOpenForBusiness": true,
+        "isFoodPreorderRequired": false,
+        "foodPreorderAvailability": "NONE",
+        "isMaxSafetyOperation": false
+      },
+      {
+        "id": "1100",
+        "slug": "dc-metro-area",
+        "name": "DC Metro Area",
+        "marketStatus": "OPEN",
+        "subscriptionProgramStatus": "OPEN",
+        "isOpenForBusiness": true,
+        "isFoodPreorderRequired": false,
+        "foodPreorderAvailability": "NONE",
+        "isMaxSafetyOperation": false
+      },
+      {
+        "id": "0700",
+        "slug": "dfw",
+        "name": "Dallas/Fort Worth",
+        "marketStatus": "OPEN",
+        "subscriptionProgramStatus": "OPEN",
+        "isOpenForBusiness": true,
+        "isFoodPreorderRequired": false,
+        "foodPreorderAvailability": "NONE",
+        "isMaxSafetyOperation": false
+      },
+      {
+        "id": "0400",
+        "slug": "denver",
+        "name": "Denver Area",
+        "marketStatus": "OPEN",
+        "subscriptionProgramStatus": "OPEN",
+        "isOpenForBusiness": true,
+        "isFoodPreorderRequired": false,
+        "foodPreorderAvailability": "NONE",
+        "isMaxSafetyOperation": false
+      },
+      {
+        "id": "3100",
+        "slug": "indianapolis",
+        "name": "Indianapolis",
+        "marketStatus": "OPEN",
+        "subscriptionProgramStatus": "OPEN",
+        "isOpenForBusiness": true,
+        "isFoodPreorderRequired": false,
+        "foodPreorderAvailability": "NONE",
+        "isMaxSafetyOperation": false
+      },
+      {
+        "id": "1500",
+        "slug": "laredo",
+        "name": "Laredo",
+        "marketStatus": "OPEN",
+        "subscriptionProgramStatus": "OPEN",
+        "isOpenForBusiness": true,
+        "isFoodPreorderRequired": false,
+        "foodPreorderAvailability": "NONE",
+        "isMaxSafetyOperation": false
+      },
+      {
+        "id": "1700",
+        "slug": "los-angeles",
+        "name": "Los Angeles",
+        "marketStatus": "OPEN",
+        "subscriptionProgramStatus": "OPEN",
+        "isOpenForBusiness": true,
+        "isFoodPreorderRequired": false,
+        "foodPreorderAvailability": "NONE",
+        "isMaxSafetyOperation": false
+      },
+      {
+        "id": "3200",
+        "slug": "southwest-florida",
+        "name": "Naples, FL",
+        "marketStatus": "OPEN",
+        "subscriptionProgramStatus": "OPEN",
+        "isOpenForBusiness": true,
+        "isFoodPreorderRequired": false,
+        "foodPreorderAvailability": "NONE",
+        "isMaxSafetyOperation": false
+      },
+      {
+        "id": "2100",
+        "slug": "nyc",
+        "name": "New York City",
+        "marketStatus": "OPEN",
+        "subscriptionProgramStatus": "OPEN",
+        "isOpenForBusiness": true,
+        "isFoodPreorderRequired": false,
+        "foodPreorderAvailability": "NONE",
+        "isMaxSafetyOperation": false
+      },
+      {
+        "id": "0500",
+        "slug": "northern-virginia",
+        "name": "Northern Virginia",
+        "marketStatus": "OPEN",
+        "subscriptionProgramStatus": "OPEN",
+        "isOpenForBusiness": true,
+        "isFoodPreorderRequired": false,
+        "foodPreorderAvailability": "NONE",
+        "isMaxSafetyOperation": false
+      },
+      {
+        "id": "1600",
+        "slug": "omaha",
+        "name": "Omaha",
+        "marketStatus": "OPEN",
+        "subscriptionProgramStatus": "OPEN",
+        "isOpenForBusiness": true,
+        "isFoodPreorderRequired": false,
+        "foodPreorderAvailability": "NONE",
+        "isMaxSafetyOperation": false
+      },
+      {
+        "id": "2200",
+        "slug": "raleigh",
+        "name": "Raleigh",
+        "marketStatus": "OPEN",
+        "subscriptionProgramStatus": "OPEN",
+        "isOpenForBusiness": true,
+        "isFoodPreorderRequired": false,
+        "foodPreorderAvailability": "NONE",
+        "isMaxSafetyOperation": false
+      },
+      {
+        "id": "0200",
+        "slug": "san-antonio",
+        "name": "San Antonio",
+        "marketStatus": "OPEN",
+        "subscriptionProgramStatus": "OPEN",
+        "isOpenForBusiness": true,
+        "isFoodPreorderRequired": false,
+        "foodPreorderAvailability": "NONE",
+        "isMaxSafetyOperation": false
+      },
+      {
+        "id": "0800",
+        "slug": "sf",
+        "name": "San Francisco Bay Area",
+        "marketStatus": "OPEN",
+        "subscriptionProgramStatus": "OPEN",
+        "isOpenForBusiness": true,
+        "isFoodPreorderRequired": false,
+        "foodPreorderAvailability": "NONE",
+        "isMaxSafetyOperation": false
+      },
+      {
+        "id": "2300",
+        "slug": "springfield",
+        "name": "Springfield, MO",
+        "marketStatus": "OPEN",
+        "subscriptionProgramStatus": "OPEN",
+        "isOpenForBusiness": true,
+        "isFoodPreorderRequired": false,
+        "foodPreorderAvailability": "NONE",
+        "isMaxSafetyOperation": false
+      },
+      {
+        "id": "2600",
+        "slug": "st-louis",
+        "name": "St. Louis",
+        "marketStatus": "OPEN",
+        "subscriptionProgramStatus": "OPEN",
+        "isOpenForBusiness": true,
+        "isFoodPreorderRequired": false,
+        "foodPreorderAvailability": "NONE",
+        "isMaxSafetyOperation": false
+      },
+      {
+        "id": "2500",
+        "slug": "twin-cities",
+        "name": "Twin Cities",
+        "marketStatus": "OPEN",
+        "subscriptionProgramStatus": "OPEN",
+        "isOpenForBusiness": true,
+        "isFoodPreorderRequired": false,
+        "foodPreorderAvailability": "NONE",
+        "isMaxSafetyOperation": false
+      },
+      {
+        "id": "0300",
+        "slug": "winchester",
+        "name": "Winchester, VA",
+        "marketStatus": "OPEN",
+        "subscriptionProgramStatus": "OPEN",
+        "isOpenForBusiness": true,
+        "isFoodPreorderRequired": false,
+        "foodPreorderAvailability": "NONE",
+        "isMaxSafetyOperation": false
+      },
+      {
+        "id": "0900",
+        "slug": "yonkers",
+        "name": "Yonkers",
+        "marketStatus": "OPEN",
+        "subscriptionProgramStatus": "OPEN",
+        "isOpenForBusiness": true,
+        "isFoodPreorderRequired": false,
+        "foodPreorderAvailability": "NONE",
+        "isMaxSafetyOperation": false
+      }
+    ],
+    "barSummaries": [],
+    "comingSoonSummaries": [
+      {
+        "name": "Teenage Sex and Death at Camp Miasma",
+        "slug": "teenage-sex-and-death-at-camp-miasma"
+      },
+      {
+        "name": "Sense and Sensibility (2026)",
+        "slug": "sense-and-sensibility-2026"
+      },
+      {
+        "name": "One Night Only",
+        "slug": "one-night-only"
+      },
+      {
+        "name": "2026 Cortis Tour <Put Your Phone Down> in LA: Live Viewing",
+        "slug": "2026-cortis-tour-in-la-live-viewing"
+      },
+      {
+        "name": "Finding Emily",
+        "slug": "finding-emily"
+      },
+      {
+        "name": "The Wrong Girls",
+        "slug": "the-wrong-girls"
+      },
+      {
+        "name": "Katy Perry: The Lifetimes Tour - Live From Paris",
+        "slug": "katy-perry-the-lifetimes-tour-live-from-paris"
+      },
+      {
+        "name": "On a String",
+        "slug": "on-a-string"
+      }
+    ],
+    "twitterId": "",
+    "facebookUrl": "",
+    "instagramId": "",
+    "specialOffers": []
+  }
+}

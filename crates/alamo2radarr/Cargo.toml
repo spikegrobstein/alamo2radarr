@@ -1,0 +1,17 @@
+[package]
+name = "alamo2radarr"
+description = "Add Alamo Drafthouse repertory programming to Radarr"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+alamo_movies = { path = "../alamo_movies" }
+radarr = { path = "../radarr" }
+thiserror.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true
