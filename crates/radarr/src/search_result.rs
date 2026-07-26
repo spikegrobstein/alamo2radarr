@@ -26,6 +26,12 @@ pub struct SearchResult {
     pub year: u32,
     /// The movie's TMDB identifier.
     pub tmdb_id: u32,
+    /// The movie's IMDb identifier, when supplied by Radarr.
+    #[serde(default)]
+    pub imdb_id: Option<String>,
+    /// The movie's runtime in minutes, when supplied by Radarr.
+    #[serde(default)]
+    pub runtime: Option<u32>,
     /// Radarr's URL-safe title identifier.
     pub title_slug: String,
     /// Image metadata returned by Radarr and forwarded when adding the movie.
@@ -58,6 +64,8 @@ mod tests {
             alternate_titles: vec![],
             year: 1982,
             tmdb_id: 1091,
+            imdb_id: Some("tt0084787".into()),
+            runtime: Some(109),
             title_slug: "the-thing-1982".into(),
             images: vec![],
             monitored: false,

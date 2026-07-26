@@ -56,13 +56,13 @@ Run `cargo test --workspace` for tests and `cargo clippy --workspace --all-targe
 
 ### Alamo fixtures
 
-The test suite includes a complete live market response and a reduced Austin schedule response containing every presentation's fields consumed by the client. Refresh them from the public, read-only Alamo endpoints with:
+The test suite includes a complete live market response, a reduced Austin schedule response, and a presentation-detail response containing the fields consumed by the client. Refresh them from the public, read-only Alamo endpoints with:
 
 ```sh
 ./scripts/update-alamo-fixtures.sh
 ```
 
-Set `ALAMO_FIXTURE_MARKET` to capture a different market or `ALAMO_API_URL` to use an API proxy. The refresh script requires `curl` and `jq`.
+Set `ALAMO_FIXTURE_MARKET` to capture a different market, `ALAMO_FIXTURE_PRESENTATION` to select a specific presentation slug, or `ALAMO_API_URL` to use an API proxy. The refresh script requires `curl` and `jq`.
 
 ## Container
 

@@ -29,6 +29,16 @@ struct ScheduleData {
     presentations: Vec<Presentation>,
 }
 
+#[derive(Debug, Deserialize)]
+struct PresentationResponse {
+    data: PresentationData,
+}
+
+#[derive(Debug, Deserialize)]
+struct PresentationData {
+    presentation: Presentation,
+}
+
 /// A blocking client for Alamo Drafthouse schedule endpoints.
 #[derive(Clone, Debug)]
 pub struct Client {
@@ -70,6 +80,27 @@ impl Client {
             .error_for_status()?
             .json::<ScheduleResponse>()?;
         Ok(response.data.presentations)
+    }
+
+    /// Fetches full movie metadata for a presentation in a market.
+    pub fn presentation(
+        &self,
+        market_slug: &str,
+        presentation_slug: &str,
+    ) -> Result<Presentation, Error> {
+        let mut url = self.base_url.join("s/mother/v2/schedule/presentation/")?;
+        url.path_segments_mut()
+            .expect("HTTP URLs support path segments")
+            .pop_if_empty()
+            .push(market_slug)
+            .push(presentation_slug);
+        let response = self
+            .http
+            .get(url)
+            .send()?
+            .error_for_status()?
+            .json::<PresentationResponse>()?;
+        Ok(response.data.presentation)
     }
 }
 
@@ -142,6 +173,22 @@ mod tests {
     }
 
     #[test]
+    fn deserializes_detailed_presentation_metadata() {
+        let response: PresentationResponse = serde_json::from_str(
+            r#"{"data":{"presentation":{"slug":"the-thing","show":{"title":"The Thing","nationalReleaseDateUtc":"1982-06-25","imdbId":"tt0084787","runtimeMinutes":109,"directors":["John Carpenter"]},"formatSlugs":["35mm"]}}}"#,
+        )
+        .unwrap();
+
+        let show = response.data.presentation.show;
+        assert_eq!(
+            show.national_release_date_utc.as_deref(),
+            Some("1982-06-25")
+        );
+        assert_eq!(show.imdb_id.as_deref(), Some("tt0084787"));
+        assert_eq!(show.runtime_minutes, Some(109));
+    }
+
+    #[test]
     fn rejects_schedule_without_presentations() {
         assert!(serde_json::from_str::<ScheduleResponse>(r#"{"data":{}}"#).is_err());
     }
@@ -170,5 +217,22 @@ mod tests {
         assert!(response.data.presentations.iter().any(|presentation| {
             presentation.primary_collection_slug.as_deref() == Some("weird-wednesday")
         }));
+    }
+
+    #[test]
+    fn deserializes_live_austin_presentation_fixture() {
+        let response: PresentationResponse =
+            serde_json::from_str(include_str!("../tests/fixtures/austin-presentation.json"))
+                .unwrap();
+
+        assert!(!response.data.presentation.slug.is_empty());
+        assert!(
+            response
+                .data
+                .presentation
+                .show
+                .national_release_date_utc
+                .is_some()
+        );
     }
 }

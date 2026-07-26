@@ -39,13 +39,19 @@ const TITLE_PREFIXES: &[&str] = &[
     "PSYCHO CINEMA: ",
 ];
 
-/// A normalized movie title and optional release year parsed from an Alamo title.
+/// Normalized Alamo movie metadata used to identify a Radarr result.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct MovieTitle {
     /// The normalized title used for Radarr searches and comparisons.
     pub title: String,
     /// The release year parsed from the Alamo title, when present.
     pub year: Option<u32>,
+    /// The IMDb identifier supplied by Alamo, when present.
+    pub imdb_id: Option<String>,
+    /// The runtime supplied by Alamo, when present.
+    pub runtime_minutes: Option<u32>,
+    /// Directors credited by Alamo.
+    pub directors: Vec<String>,
 }
 
 /// Runtime settings controlling how movies are added to Radarr.
@@ -134,7 +140,37 @@ pub fn parse_title(title: &str) -> MovieTitle {
     MovieTitle {
         title: title.to_owned(),
         year,
+        imdb_id: None,
+        runtime_minutes: None,
+        directors: Vec::new(),
     }
+}
+
+fn movie_metadata(presentation: Presentation) -> MovieTitle {
+    let mut movie = parse_title(&presentation.show.title);
+    if let Some(year) = presentation
+        .show
+        .national_release_date_utc
+        .as_deref()
+        .and_then(release_year)
+    {
+        movie.year = Some(year);
+    }
+    movie.imdb_id = presentation
+        .show
+        .imdb_id
+        .filter(|imdb_id| !imdb_id.trim().is_empty());
+    movie.runtime_minutes = presentation
+        .show
+        .runtime_minutes
+        .filter(|runtime| *runtime > 0);
+    movie.directors = presentation.show.directors;
+    movie
+}
+
+fn release_year(date: &str) -> Option<u32> {
+    let year = date.get(..4)?.parse().ok()?;
+    (year >= 1888 && year != 1900).then_some(year)
 }
 
 /// Returns whether a presentation belongs to one of [`TARGET_COLLECTIONS`].
@@ -151,7 +187,7 @@ pub fn unique_titles(presentations: impl IntoIterator<Item = Presentation>) -> V
     presentations
         .into_iter()
         .filter(is_target_presentation)
-        .map(|presentation| parse_title(&presentation.show.title))
+        .map(movie_metadata)
         .filter(|movie| {
             !movie.title.is_empty() && seen.insert((movie.title.to_lowercase(), movie.year))
         })
@@ -169,28 +205,92 @@ pub enum Match<'a> {
     Ambiguous(Vec<&'a SearchResult>),
 }
 
-/// Selects exact primary or alternative title matches, constrained by year when known.
+/// Selects a Radarr result by IMDb ID or by normalized title and release year.
+///
+/// Runtime is used only to resolve multiple title-and-year matches. A candidate without
+/// either an IMDb ID or a usable release year is not selected automatically.
 pub fn best_match<'a>(term: &MovieTitle, results: &'a [SearchResult]) -> Match<'a> {
-    let normalized_term = term.title.to_lowercase();
+    if let Some(imdb_id) = term.imdb_id.as_deref() {
+        let matches = distinct_results(results.iter().filter(|result| {
+            result
+                .imdb_id
+                .as_deref()
+                .is_some_and(|candidate| candidate.eq_ignore_ascii_case(imdb_id))
+        }));
+        if !matches.is_empty() {
+            return classify(matches);
+        }
+    }
+
+    let Some(year) = term.year else {
+        return Match::None;
+    };
+    let title_variants = title_variants(&term.title);
     let mut by_tmdb_id = HashMap::new();
     for result in results.iter().filter(|result| {
-        (result.title.to_lowercase() == normalized_term
+        (title_variants.contains(&result.title.to_lowercase())
             || result
                 .alternate_titles
                 .iter()
-                .any(|title| title.title.to_lowercase() == normalized_term))
-            && term.year.is_none_or(|year| result.year == year)
+                .any(|title| title_variants.contains(&title.title.to_lowercase())))
+            && result.year == year
     }) {
         by_tmdb_id.entry(result.tmdb_id).or_insert(result);
     }
 
     let mut matches: Vec<_> = by_tmdb_id.into_values().collect();
     matches.sort_by_key(|movie| (movie.year, movie.tmdb_id));
+    if matches.len() > 1
+        && let Some(runtime) = term.runtime_minutes
+    {
+        let smallest_difference = matches
+            .iter()
+            .filter_map(|movie| movie.runtime.map(|value| value.abs_diff(runtime)))
+            .min();
+        if let Some(difference) = smallest_difference.filter(|difference| *difference <= 15) {
+            let closest: Vec<_> = matches
+                .iter()
+                .copied()
+                .filter(|movie| {
+                    movie
+                        .runtime
+                        .is_some_and(|value| value.abs_diff(runtime) == difference)
+                })
+                .collect();
+            if closest.len() == 1 {
+                return Match::Unique(closest[0]);
+            }
+        }
+    }
+    classify(matches)
+}
+
+fn distinct_results<'a>(results: impl Iterator<Item = &'a SearchResult>) -> Vec<&'a SearchResult> {
+    let mut by_tmdb_id = HashMap::new();
+    for result in results {
+        by_tmdb_id.entry(result.tmdb_id).or_insert(result);
+    }
+    let mut results: Vec<_> = by_tmdb_id.into_values().collect();
+    results.sort_by_key(|movie| (movie.year, movie.tmdb_id));
+    results
+}
+
+fn classify(matches: Vec<&SearchResult>) -> Match<'_> {
     match matches.as_slice() {
         [] => Match::None,
         [result] => Match::Unique(result),
         _ => Match::Ambiguous(matches),
     }
+}
+
+fn title_variants(title: &str) -> HashSet<String> {
+    let mut variants = HashSet::from([title.to_lowercase()]);
+    if let Some((presenter, movie_title)) = title.split_once("'s ")
+        && presenter.contains(' ')
+    {
+        variants.insert(movie_title.to_lowercase());
+    }
+    variants
 }
 
 /// Fetches eligible Alamo presentations and synchronizes unique matches to Radarr.
@@ -208,18 +308,51 @@ pub fn synchronize(
         markets: markets.len(),
         ..SyncReport::default()
     };
-    let mut presentations = Vec::new();
+    let mut scheduled_presentations = Vec::new();
 
     for market in markets {
         eprintln!("Fetching Alamo schedule for {}", market.slug);
         match alamo.presentations(&market.slug) {
-            Ok(mut market_presentations) => {
+            Ok(market_presentations) => {
                 report.presentations += market_presentations.len();
-                presentations.append(&mut market_presentations);
+                scheduled_presentations.extend(
+                    market_presentations
+                        .into_iter()
+                        .filter(is_target_presentation)
+                        .map(|presentation| (market.slug.clone(), presentation)),
+                );
             }
             Err(error) => {
                 report.failed += 1;
                 eprintln!("Failed to fetch {}: {error}", market.slug);
+            }
+        }
+    }
+
+    let mut seen_presentations = HashSet::new();
+    let mut presentations = Vec::new();
+    for (market_slug, summary) in scheduled_presentations {
+        let identity = if summary.show.slug.is_empty() {
+            summary.show.title.to_lowercase()
+        } else {
+            summary.show.slug.to_lowercase()
+        };
+        if !seen_presentations.insert(identity) {
+            continue;
+        }
+        if summary.slug.is_empty() {
+            presentations.push(summary);
+            continue;
+        }
+        match alamo.presentation(&market_slug, &summary.slug) {
+            Ok(presentation) => presentations.push(presentation),
+            Err(error) => {
+                report.failed += 1;
+                eprintln!(
+                    "Failed to fetch details for {}: {error}",
+                    summary.show.title
+                );
+                presentations.push(summary);
             }
         }
     }
@@ -316,12 +449,28 @@ mod tests {
 
     fn presentation(title: &str, collection: Option<&str>) -> Presentation {
         Presentation {
+            slug: String::new(),
             show: Show {
                 slug: String::new(),
                 title: title.into(),
                 certification: None,
+                national_release_date_utc: None,
+                imdb_id: None,
+                runtime_minutes: None,
+                directors: vec![],
             },
             primary_collection_slug: collection.map(Into::into),
+            format_slugs: vec![],
+        }
+    }
+
+    fn movie_title(title: &str, year: Option<u32>) -> MovieTitle {
+        MovieTitle {
+            title: title.into(),
+            year,
+            imdb_id: None,
+            runtime_minutes: None,
+            directors: vec![],
         }
     }
 
@@ -332,6 +481,8 @@ mod tests {
             alternate_titles: vec![],
             year,
             tmdb_id,
+            imdb_id: None,
+            runtime: None,
             title_slug: format!("{title}-{year}"),
             images: vec![],
             monitored: false,
@@ -379,10 +530,7 @@ mod tests {
     fn parses_event_prefix_and_release_year() {
         assert_eq!(
             parse_title("WEIRD WEDNESDAY: What Ever Happened to Baby Jane? (1962)"),
-            MovieTitle {
-                title: "What Ever Happened to Baby Jane?".into(),
-                year: Some(1962),
-            }
+            movie_title("What Ever Happened to Baby Jane?", Some(1962))
         );
     }
 
@@ -393,13 +541,7 @@ mod tests {
             presentation("the thing", Some("weird-wednesday")),
             presentation("Up", Some("family-party")),
         ]);
-        assert_eq!(
-            titles,
-            [MovieTitle {
-                title: "The Thing".into(),
-                year: None,
-            }]
-        );
+        assert_eq!(titles, [movie_title("The Thing", None)]);
     }
 
     #[test]
@@ -410,10 +552,7 @@ mod tests {
         }];
         assert!(matches!(
             best_match(
-                &MovieTitle {
-                    title: "shichinin no samurai".into(),
-                    year: None,
-                },
+                &movie_title("shichinin no samurai", Some(1954)),
                 &[alternate]
             ),
             Match::Unique(_)
@@ -421,20 +560,14 @@ mod tests {
     }
 
     #[test]
-    fn rejects_different_movies_with_the_same_title() {
+    fn refuses_title_only_match_without_year() {
         let results = [
             result("The Thing", 1982, 1091),
             result("The Thing", 2011, 60935),
         ];
         assert!(matches!(
-            best_match(
-                &MovieTitle {
-                    title: "The Thing".into(),
-                    year: None,
-                },
-                &results
-            ),
-            Match::Ambiguous(_)
+            best_match(&movie_title("The Thing", None), &results),
+            Match::None
         ));
     }
 
@@ -444,10 +577,7 @@ mod tests {
             result("The Thing", 1982, 1091),
             result("The Thing", 2011, 60935),
         ];
-        let title = MovieTitle {
-            title: "The Thing".into(),
-            year: Some(1982),
-        };
+        let title = movie_title("The Thing", Some(1982));
         assert!(matches!(best_match(&title, &results), Match::Unique(movie) if movie.year == 1982));
     }
 
@@ -455,13 +585,7 @@ mod tests {
     fn collapses_duplicate_results_for_the_same_movie() {
         let results = [result("Alien", 1979, 348), result("Alien", 1979, 348)];
         assert!(matches!(
-            best_match(
-                &MovieTitle {
-                    title: "Alien".into(),
-                    year: None,
-                },
-                &results
-            ),
+            best_match(&movie_title("Alien", Some(1979)), &results),
             Match::Unique(_)
         ));
     }
@@ -469,18 +593,49 @@ mod tests {
     #[test]
     fn matches_unicode_case_insensitively() {
         let results = [result("Amélie", 2001, 194)];
-        let title = MovieTitle {
-            title: "AMÉLIE".into(),
-            year: None,
-        };
+        let title = movie_title("AMÉLIE", Some(2001));
         assert!(matches!(best_match(&title, &results), Match::Unique(_)));
+    }
+
+    #[test]
+    fn imdb_id_takes_precedence_over_title() {
+        let mut result = result("Manhunter", 1986, 11454);
+        result.imdb_id = Some("tt0091474".into());
+        let mut title = movie_title("A Decorated Event Title", None);
+        title.imdb_id = Some("tt0091474".into());
+
+        assert!(matches!(best_match(&title, &[result]), Match::Unique(_)));
+    }
+
+    #[test]
+    fn strips_filmmaker_prefix_when_year_matches() {
+        let results = [result("Manhunter", 1986, 11454)];
+        let title = movie_title("Michael Mann's Manhunter", Some(1986));
+
+        assert!(matches!(best_match(&title, &results), Match::Unique(_)));
+    }
+
+    #[test]
+    fn runtime_breaks_title_and_year_tie() {
+        let mut shorter = result("Crash", 1996, 123);
+        shorter.runtime = Some(100);
+        let mut longer = result("Crash", 1996, 456);
+        longer.runtime = Some(130);
+        let mut title = movie_title("Crash", Some(1996));
+        title.runtime_minutes = Some(128);
+
+        assert!(matches!(
+            best_match(&title, &[shorter, longer]),
+            Match::Unique(movie) if movie.tmdb_id == 456
+        ));
     }
 
     #[test]
     fn dry_run_searches_without_fetching_root_folders_or_adding() {
         let (alamo_url, alamo_requests) = http_server(vec![
             r#"{"data":{"marketSummaries":[{"id":"market-id","name":"Austin","slug":"austin"}]}}"#,
-            r#"{"data":{"presentations":[{"show":{"title":"WEIRD WEDNESDAY: The Thing (1982)"},"primaryCollectionSlug":"weird-wednesday"}]}}"#,
+            r#"{"data":{"presentations":[{"slug":"weird-wednesday-the-thing","show":{"slug":"the-thing","title":"WEIRD WEDNESDAY: The Thing"},"primaryCollectionSlug":"weird-wednesday"}]}}"#,
+            r#"{"data":{"presentation":{"slug":"weird-wednesday-the-thing","show":{"slug":"the-thing","title":"WEIRD WEDNESDAY: The Thing","nationalReleaseDateUtc":"1982-06-25","runtimeMinutes":109},"primaryCollectionSlug":"weird-wednesday"}}}"#,
         ]);
         let (radarr_url, radarr_requests) = http_server(vec![
             r#"[{"title":"The Thing","year":1982,"tmdbId":1091,"titleSlug":"the-thing-1982"}]"#,
@@ -505,9 +660,12 @@ mod tests {
 
         assert_eq!(report.unique_titles, 1);
         let requests = alamo_requests.join().unwrap();
-        assert_eq!(requests.len(), 2);
+        assert_eq!(requests.len(), 3);
         assert!(requests[0].starts_with("GET /s/mother/v1/page/cclamp?useUnifiedSchedule=true "));
         assert!(requests[1].starts_with("GET /s/mother/v2/schedule/market/austin "));
+        assert!(requests[2].starts_with(
+            "GET /s/mother/v2/schedule/presentation/austin/weird-wednesday-the-thing "
+        ));
         let requests = radarr_requests.join().unwrap();
         assert_eq!(requests.len(), 1);
         assert!(requests[0].starts_with("GET /api/v3/movie/lookup?term=The+Thing "));
@@ -531,10 +689,22 @@ mod tests {
                 .iter()
                 .any(|movie| movie.title.eq_ignore_ascii_case("Kitten with a Whip"))
         );
-        assert!(titles.contains(&MovieTitle {
-            title: "What Ever Happened to Baby Jane?".into(),
-            year: Some(1962),
-        }));
+        assert!(titles.contains(&movie_title("What Ever Happened to Baby Jane?", Some(1962))));
         assert!(titles.iter().any(|movie| movie.title == "The Dead Pit"));
+    }
+
+    #[test]
+    fn matches_movie_from_live_presentation_detail_fixture() {
+        let fixture: serde_json::Value = serde_json::from_str(include_str!(
+            "../../alamo_movies/tests/fixtures/austin-presentation.json"
+        ))
+        .unwrap();
+        let presentation: Presentation =
+            serde_json::from_value(fixture["data"]["presentation"].clone()).unwrap();
+        let movie = movie_metadata(presentation);
+        let year = movie.year.expect("fixture presentation has a release year");
+        let results = [result(&movie.title, year, 1)];
+
+        assert!(matches!(best_match(&movie, &results), Match::Unique(_)));
     }
 }

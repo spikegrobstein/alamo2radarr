@@ -108,6 +108,8 @@ mod tests {
             alternate_titles: vec![],
             year: 1982,
             tmdb_id: 1091,
+            imdb_id: Some("tt0084787".into()),
+            runtime: Some(109),
             title_slug: "the-thing-1982".into(),
             images: vec![],
             monitored: false,

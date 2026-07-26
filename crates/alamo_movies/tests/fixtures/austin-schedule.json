@@ -2,716 +2,1074 @@
   "data": {
     "presentations": [
       {
+        "slug": "spider-man-brand-new-day",
         "show": {
           "slug": "spider-man-brand-new-day",
           "title": "Spider-Man: Brand New Day",
           "certification": "PG-13"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "the-odyssey",
         "show": {
           "slug": "the-odyssey",
           "title": "The Odyssey",
           "certification": "R"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital",
+          "70mm",
+          "open-caption"
+        ]
       },
       {
+        "slug": "hdr-by-barco-spider-man-brand-new-day",
         "show": {
           "slug": "spider-man-brand-new-day",
           "title": "Spider-Man: Brand New Day",
           "certification": "PG-13"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "hdr-by-barco-the-odyssey",
         "show": {
           "slug": "the-odyssey",
           "title": "The Odyssey",
           "certification": "R"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "the-invite",
         "show": {
           "slug": "the-invite",
           "title": "The Invite",
           "certification": "R"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "moana-2026",
         "show": {
           "slug": "moana-2026",
           "title": "Moana (2026)",
           "certification": "PG"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "minions-and-monsters",
         "show": {
           "slug": "minions-and-monsters",
           "title": "Minions & Monsters",
           "certification": "PG"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "avengers-doomsday",
         "show": {
           "slug": "avengers-doomsday",
           "title": "Avengers: Doomsday",
           "certification": null
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "hdr"
+        ]
       },
       {
+        "slug": "toy-story-5",
         "show": {
           "slug": "toy-story-5",
           "title": "Toy Story 5",
           "certification": "PG"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "her-private-hell",
         "show": {
           "slug": "her-private-hell",
           "title": "Her Private Hell",
           "certification": "R"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "paw-patrol-the-dino-movie",
         "show": {
           "slug": "paw-patrol-the-dino-movie",
           "title": "Paw Patrol: The Dino Movie",
           "certification": "PG"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "the-end-of-oak-street",
         "show": {
           "slug": "the-end-of-oak-street",
           "title": "The End of Oak Street",
           "certification": "PG-13"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "the-fast-and-the-furious-25th-anniversary",
         "show": {
           "slug": "the-fast-and-the-furious-25th-anniversary",
           "title": "The Fast and the Furious: 25th Anniversary",
           "certification": "PG-13"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "butthole-surfers-the-hole-truth-and-nothing-butt",
         "show": {
           "slug": "butthole-surfers-the-hole-truth-and-nothing-butt",
           "title": "Butthole Surfers: The Hole Truth and Nothing Butt",
           "certification": "NR"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "kids-camp-paddington-2",
         "show": {
           "slug": "paddington-2",
           "title": "Paddington 2",
           "certification": "PG"
         },
-        "primaryCollectionSlug": "alamo-kids-camp"
+        "primaryCollectionSlug": "alamo-kids-camp",
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "evil-dead-burn",
         "show": {
           "slug": "evil-dead-burn",
           "title": "Evil Dead Burn",
           "certification": "R"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "motor-city",
         "show": {
           "slug": "motor-city",
           "title": "Motor City",
           "certification": "R"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "wet-hot-american-summer-25th-anniversary",
         "show": {
           "slug": "wet-hot-american-summer-25th-anniversary",
           "title": "Wet Hot American Summer: 25th Anniversary",
           "certification": "R"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "kids-camp-arco",
         "show": {
           "slug": "arco",
           "title": "Arco",
           "certification": "PG"
         },
-        "primaryCollectionSlug": "alamo-kids-camp"
+        "primaryCollectionSlug": "alamo-kids-camp",
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "super-troopers-3",
         "show": {
           "slug": "super-troopers-3",
           "title": "Super Troopers 3",
           "certification": "R"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "hadestown-the-musical",
         "show": {
           "slug": "hadestown-the-musical",
           "title": "Hadestown: The Musical",
           "certification": "NR"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "jeopardy-interactive",
         "show": {
           "slug": "jeopardy-interactive",
           "title": "Jeopardy! Interactive",
           "certification": null
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "movie-party-the-fast-and-the-furious-25th-anniversary",
         "show": {
           "slug": "the-fast-and-the-furious-25th-anniversary",
           "title": "The Fast and the Furious: 25th Anniversary",
           "certification": "PG-13"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "movie-party-the-outsiders-the-complete-novel",
         "show": {
           "slug": "the-outsiders-the-complete-novel",
           "title": "The Outsiders: The Complete Novel",
           "certification": "PG-13"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "sheep-in-the-box",
         "show": {
           "slug": "sheep-in-the-box",
           "title": "Sheep in the Box",
           "certification": "PG"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "i-saw-the-tv-glow",
         "show": {
           "slug": "i-saw-the-tv-glow",
           "title": "I Saw the TV Glow",
           "certification": "PG-13"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "mothra-vs-godzilla",
         "show": {
           "slug": "mothra-vs-godzilla",
           "title": "Mothra vs. Godzilla",
           "certification": "NR"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "rashomon",
         "show": {
           "slug": "rashomon",
           "title": "Rashomon",
           "certification": null
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "sad-girl-cinema-club-the-piano",
         "show": {
           "slug": "the-piano",
           "title": "The Piano",
           "certification": "R"
         },
-        "primaryCollectionSlug": "sad-girl-cinema-club"
+        "primaryCollectionSlug": "sad-girl-cinema-club",
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "advance-screening-paw-patrol-the-dino-movie-early-access-my-first-movie",
         "show": {
           "slug": "paw-patrol-the-dino-movie",
           "title": "Paw Patrol: The Dino Movie",
           "certification": "PG"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "alamo-crafthouse-catvideofest-2026",
         "show": {
           "slug": "catvideofest-2026",
           "title": "CatVideoFest 2026",
           "certification": "NR"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "casualties-of-war",
         "show": {
           "slug": "casualties-of-war",
           "title": "Casualties of War",
           "certification": "R"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "movie-party-elf",
         "show": {
           "slug": "elf",
           "title": "Elf",
           "certification": "PG"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "special-event-boyhood-w-pre-recorded-q-a",
         "show": {
           "slug": "boyhood",
           "title": "Boyhood",
           "certification": "R"
         },
-        "primaryCollectionSlug": "drafthouse-recommends"
+        "primaryCollectionSlug": "drafthouse-recommends",
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "i-want-your-sex",
         "show": {
           "slug": "i-want-your-sex",
           "title": "I Want Your Sex",
           "certification": "R"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "kids-camp-marcel-the-shell-with-shoes-on",
         "show": {
           "slug": "marcel-the-shell-with-shoes-on",
           "title": "Marcel the Shell with Shoes On",
           "certification": "PG"
         },
-        "primaryCollectionSlug": "alamo-kids-camp"
+        "primaryCollectionSlug": "alamo-kids-camp",
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "kids-camp-moonrise-kingdom",
         "show": {
           "slug": "moonrise-kingdom",
           "title": "Moonrise Kingdom",
           "certification": "PG-13"
         },
-        "primaryCollectionSlug": "alamo-kids-camp"
+        "primaryCollectionSlug": "alamo-kids-camp",
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "kids-camp-where-is-the-friends-house",
         "show": {
           "slug": "where-is-the-friends-house",
           "title": "Where is the Friend's House?",
           "certification": "NR"
         },
-        "primaryCollectionSlug": "alamo-kids-camp"
+        "primaryCollectionSlug": "alamo-kids-camp",
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "phantom-of-the-paradise",
         "show": {
           "slug": "phantom-of-the-paradise",
           "title": "Phantom of the Paradise",
           "certification": "PG"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "raising-cain",
         "show": {
           "slug": "raising-cain",
           "title": "Raising Cain",
           "certification": "R"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "the-untouchables",
         "show": {
           "slug": "the-untouchables",
           "title": "The Untouchables",
           "certification": "R"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "fan-event-super-troopers-3-special-broken-lizard-fan-event",
         "show": {
           "slug": "super-troopers-3",
           "title": "Super Troopers 3",
           "certification": "R"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "live-q-a-butthole-surfers-the-hole-truth-and-nothing-butt",
         "show": {
           "slug": "butthole-surfers-the-hole-truth-and-nothing-butt",
           "title": "Butthole Surfers: The Hole Truth and Nothing Butt",
           "certification": "NR"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "mystery-machine-7-27-2026",
         "show": {
           "slug": "mystery-machine-7-27-2026",
           "title": "Mystery Machine (7/27/2026)",
           "certification": "R"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "snake-eyes",
         "show": {
           "slug": "snake-eyes",
           "title": "Snake Eyes",
           "certification": "R"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "terminator-2-judgement-day-35th-anniversary",
         "show": {
           "slug": "terminator-2-judgement-day-35th-anniversary",
           "title": "Terminator 2: Judgement Day 35th Anniversary",
           "certification": "R"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "your-letter",
         "show": {
           "slug": "your-letter",
           "title": "Your Letter",
           "certification": "NR"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "catvideofest-2026",
         "show": {
           "slug": "catvideofest-2026",
           "title": "CatVideoFest 2026",
           "certification": "NR"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "six-the-musical-live",
         "show": {
           "slug": "six-the-musical-live",
           "title": "Six: The Musical Live!",
           "certification": "PG-13"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "a-new-leaf",
         "show": {
           "slug": "a-new-leaf",
           "title": "A New Leaf",
           "certification": "G"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "grateful-dead-meet-up-at-the-movies-2026",
         "show": {
           "slug": "grateful-dead-meet-up-at-the-movies-2026",
           "title": "Grateful Dead Meet-Up at the Movies 2026",
           "certification": "NR"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "mikey-and-nicky",
         "show": {
           "slug": "mikey-and-nicky",
           "title": "Mikey and Nicky",
           "certification": "R"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "obsession-2026",
         "show": {
           "slug": "obsession-2026",
           "title": "Obsession (2026)",
           "certification": "R"
         },
-        "primaryCollectionSlug": "drafthouse-recommends"
+        "primaryCollectionSlug": "drafthouse-recommends",
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "queer-film-theory-101-little-shop-of-horrors-1986",
         "show": {
           "slug": "little-shop-of-horrors",
           "title": "Little Shop of Horrors (1986)",
           "certification": "PG-13"
         },
-        "primaryCollectionSlug": "queer-film-theory-101"
+        "primaryCollectionSlug": "queer-film-theory-101",
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "were-all-going-to-the-worlds-fair",
         "show": {
           "slug": "were-all-going-to-the-worlds-fair",
           "title": "We're All Going to the World's Fair",
           "certification": "NR"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "blow-out",
         "show": {
           "slug": "blow-out",
           "title": "Blow Out",
           "certification": "R"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "carrie",
         "show": {
           "slug": "carrie",
           "title": "Carrie (1976)",
           "certification": "R"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "de-palma",
         "show": {
           "slug": "de-palma",
           "title": "De Palma",
           "certification": "R"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "drafthouse-recommends-teenage-sex-and-death-at-camp-miasma-w-livestream-q-a",
         "show": {
           "slug": "teenage-sex-and-death-at-camp-miasma",
           "title": "Teenage Sex and Death at Camp Miasma",
           "certification": "R"
         },
-        "primaryCollectionSlug": "drafthouse-recommends"
+        "primaryCollectionSlug": "drafthouse-recommends",
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "ghost-2-big-to-rig",
         "show": {
           "slug": "ghost-2-big-to-rig",
           "title": "GHOST: 2 Big To Rig",
           "certification": "NR"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "gourmet-cinema-tony-feast",
         "show": {
           "slug": "tony",
           "title": "Tony",
           "certification": "R"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "live-q-a-scary-movie-1991",
         "show": {
           "slug": "scary-movie-1991",
           "title": "Scary Movie (1991)",
           "certification": "NR"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "master-pancake-hook",
         "show": {
           "slug": "hook",
           "title": "Hook",
           "certification": "PG"
         },
-        "primaryCollectionSlug": "master-pancake"
+        "primaryCollectionSlug": "master-pancake",
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "mysterious-skin",
         "show": {
           "slug": "mysterious-skin",
           "title": "Mysterious Skin (4K Restoration)",
           "certification": "NC-17"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "sing-along-six-the-musical-live",
         "show": {
           "slug": "six-the-musical-live",
           "title": "Six: The Musical Live!",
           "certification": "PG-13"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "special-event-wet-hot-american-summer-25th-anniversary-party",
         "show": {
           "slug": "wet-hot-american-summer-25th-anniversary",
           "title": "Wet Hot American Summer: 25th Anniversary",
           "certification": "R"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "the-terminator-treasure-island-reimagined",
         "show": {
           "slug": "the-terminator-1984",
           "title": "The Terminator",
           "certification": "R"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "the-thing-called-love",
         "show": {
           "slug": "the-thing-called-love",
           "title": "The Thing Called Love",
           "certification": "PG-13"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "agfadrome-mystery-voyage-july-2026",
         "show": {
           "slug": "mystery-voyage",
           "title": "Mystery Voyage",
           "certification": null
         },
-        "primaryCollectionSlug": "agfadrome"
+        "primaryCollectionSlug": "agfadrome",
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "katseye-wild-hearts",
         "show": {
           "slug": "katseye-wild-hearts",
           "title": "KATSEYE: Wild Hearts",
           "certification": "NR"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "my-little-chickadee",
         "show": {
           "slug": "my-little-chickadee",
           "title": "My Little Chickadee",
           "certification": "NR"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "nofx-40-years-of-fuckin-up",
         "show": {
           "slug": "nofx-40-years-of-fuckin-up",
           "title": "NOFX: 40 Years of Fuckin' Up",
           "certification": "NR"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "terror-tuesday-michael-manns-manhunter-the-final-cut",
         "show": {
           "slug": "michael-manns-manhunter-the-final-cut",
           "title": "Michael Mann's Manhunter: The Final Cut",
           "certification": "R"
         },
-        "primaryCollectionSlug": "terror-tuesday"
+        "primaryCollectionSlug": "terror-tuesday",
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "terror-tuesday-the-dead-pit",
         "show": {
           "slug": "the-dead-pit",
           "title": "The Dead Pit",
           "certification": "R"
         },
-        "primaryCollectionSlug": "terror-tuesday"
+        "primaryCollectionSlug": "terror-tuesday",
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "terror-tuesday-what-ever-happened-to-baby-jane-1962-35mm",
         "show": {
           "slug": "what-ever-happened-to-baby-jane-1962",
           "title": "What Ever Happened to Baby Jane? (1962)",
           "certification": "NR"
         },
-        "primaryCollectionSlug": "terror-tuesday"
+        "primaryCollectionSlug": "terror-tuesday",
+        "formatSlugs": [
+          "35mm"
+        ]
       },
       {
+        "slug": "the-roaring-twenties",
         "show": {
           "slug": "the-roaring-twenties",
           "title": "The Roaring Twenties",
           "certification": null
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "vera-cruz",
         "show": {
           "slug": "vera-cruz",
           "title": "Vera Cruz",
           "certification": null
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "video-vortex-mystery-transmission-038",
         "show": {
           "slug": "mystery-transmission",
           "title": "Mystery Transmission",
           "certification": "NR"
         },
-        "primaryCollectionSlug": "video-vortex"
+        "primaryCollectionSlug": "video-vortex",
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "video-vortex-mystery-transmission-039",
         "show": {
           "slug": "mystery-transmission",
           "title": "Mystery Transmission",
           "certification": "NR"
         },
-        "primaryCollectionSlug": "video-vortex"
+        "primaryCollectionSlug": "video-vortex",
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "video-vortex-mystery-transmission-040",
         "show": {
           "slug": "mystery-transmission",
           "title": "Mystery Transmission",
           "certification": "NR"
         },
-        "primaryCollectionSlug": "video-vortex"
+        "primaryCollectionSlug": "video-vortex",
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "weird-wednesday-a-lizard-in-a-womans-skin",
         "show": {
           "slug": "a-lizard-in-a-womans-skin",
           "title": "A Lizard in a Woman's Skin",
           "certification": "R"
         },
-        "primaryCollectionSlug": "weird-wednesday"
+        "primaryCollectionSlug": "weird-wednesday",
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "weird-wednesday-existenz",
         "show": {
           "slug": "existenz",
           "title": "eXistenZ",
           "certification": "R"
         },
-        "primaryCollectionSlug": "weird-wednesday"
+        "primaryCollectionSlug": "weird-wednesday",
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "weird-wednesday-pure-scum",
         "show": {
           "slug": "pure-scum",
           "title": "Pure Scum",
           "certification": null
         },
-        "primaryCollectionSlug": "weird-wednesday"
+        "primaryCollectionSlug": "weird-wednesday",
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "weird-wednesday-skidoo",
         "show": {
           "slug": "skidoo",
           "title": "Skidoo",
           "certification": "PG"
         },
-        "primaryCollectionSlug": "weird-wednesday"
+        "primaryCollectionSlug": "weird-wednesday",
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "terror-tuesday-memento-mori",
         "show": {
           "slug": "memento-mori",
           "title": "Memento Mori",
           "certification": "R"
         },
-        "primaryCollectionSlug": "terror-tuesday"
+        "primaryCollectionSlug": "terror-tuesday",
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "terror-tuesday-saw-vi",
         "show": {
           "slug": "saw-vi",
           "title": "Saw VI",
           "certification": "R"
         },
-        "primaryCollectionSlug": "terror-tuesday"
+        "primaryCollectionSlug": "terror-tuesday",
+        "formatSlugs": [
+          "35mm"
+        ]
       },
       {
+        "slug": "terror-tuesday-super-8",
         "show": {
           "slug": "super-8",
           "title": "Super 8",
           "certification": "PG-13"
         },
-        "primaryCollectionSlug": "terror-tuesday"
+        "primaryCollectionSlug": "terror-tuesday",
+        "formatSlugs": [
+          "35mm"
+        ]
       },
       {
+        "slug": "wham-10-days-in-china",
         "show": {
           "slug": "wham-10-days-in-china",
           "title": "WHAM! 10 Days in China",
           "certification": "NR"
         },
-        "primaryCollectionSlug": null
+        "primaryCollectionSlug": null,
+        "formatSlugs": [
+          "2d-digital"
+        ]
       },
       {
+        "slug": "weird-wednesday-kitten-with-a-whip",
         "show": {
           "slug": "weird-wednesday-kitten-with-a-whip",
           "title": "WEIRD WEDNESDAY: KITTEN WITH A WHIP",
           "certification": "(Standard)"
         },
-        "primaryCollectionSlug": "weird-wednesday"
+        "primaryCollectionSlug": "weird-wednesday",
+        "formatSlugs": [
+          "35mm"
+        ]
       }
     ]
   }
