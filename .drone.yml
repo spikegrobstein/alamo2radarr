@@ -17,7 +17,7 @@ steps:
       - cargo test --workspace --locked
 
   - name: publish
-    image: plugins/docker:2
+    image: plugins/docker:21.3.4
     settings:
       registry: docker.home.spike.cx
       repo: docker.home.spike.cx/alamo2radarr
@@ -33,6 +33,5 @@ steps:
 
 trigger:
   event:
-    - custom
     - push
     - pull_request
