@@ -21,10 +21,6 @@ steps:
     settings:
       registry: docker.home.spike.cx
       repo: docker.home.spike.cx/alamo2radarr
-      username:
-        from_secret: docker_registry_username
-      password:
-        from_secret: docker_registry_password
       dockerfile: Dockerfile
       tags:
         - latest
