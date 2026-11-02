@@ -90,7 +90,7 @@ Example host cron entry for Sundays at 04:00 local time:
 
 ## Drone
 
-`.drone.yml` tests every push and pull request. Pushes to `main` publish `latest` and a 12-character commit tag to `docker.home.spike.cx/alamo2radarr`.
+`.drone.yml` tests every push and pull request. Pull requests also build the final image without publishing it, exercising the static-link check before merge. Pushes to `main` publish `latest` and a 12-character commit tag to `docker.home.spike.cx/alamo2radarr`.
 
 Configure these Drone repository secrets:
 
