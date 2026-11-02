@@ -11,7 +11,8 @@ COPY Cargo.toml Cargo.lock rust-toolchain.toml ./
 COPY crates ./crates
 
 RUN cargo build --release --locked --target x86_64-unknown-linux-musl
-RUN test -z "$(scanelf --quiet --nobanner --format '%i%n' /src/target/x86_64-unknown-linux-musl/release/alamo2radarr)"
+RUN dynamic="$(scanelf --quiet --nobanner --format '%i%n' /src/target/x86_64-unknown-linux-musl/release/alamo2radarr)" \
+    && test -z "$dynamic"
 
 FROM alpine:3.22 AS certificates
 RUN apk add --no-cache ca-certificates
