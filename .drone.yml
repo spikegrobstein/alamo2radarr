@@ -16,6 +16,21 @@ steps:
       - cargo clippy --workspace --all-targets --locked -- -D warnings
       - cargo test --workspace --locked
 
+  - name: validate-image
+    image: plugins/docker:21.3.4
+    settings:
+      dry_run: true
+      repo: alamo2radarr
+      custom_dns:
+        - 1.1.1.1
+        - 8.8.8.8
+      dockerfile: Dockerfile
+      tags:
+        - test
+    when:
+      event:
+        - pull_request
+
   - name: publish
     image: plugins/docker:21.3.4
     settings:
