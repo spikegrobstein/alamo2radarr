@@ -24,6 +24,16 @@ pub enum Error {
         /// The response body returned by Radarr.
         body: String,
     },
+    /// Radarr returned a successful status with a body that was not an added movie resource.
+    #[error("Radarr returned invalid add response {status}: {body}: {source}")]
+    InvalidAddResponse {
+        /// The successful HTTP status returned by Radarr.
+        status: StatusCode,
+        /// The response body returned by Radarr.
+        body: String,
+        /// The JSON decoding failure.
+        source: serde_json::Error,
+    },
     /// Radarr returned success without confirming the requested movie resource.
     #[error(
         "Radarr add response did not confirm TMDB movie {expected_tmdb_id}: id={id}, tmdbId={actual_tmdb_id}"

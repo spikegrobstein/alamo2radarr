@@ -1,6 +1,6 @@
 use std::time::Duration;
 
-use reqwest::{blocking::Client as HttpClient, header::HeaderValue, redirect::Policy};
+use reqwest::{StatusCode, blocking::Client as HttpClient, header::HeaderValue, redirect::Policy};
 use serde::Deserialize;
 use url::Url;
 
@@ -16,7 +16,8 @@ struct AddMovieResponse {
 /// A blocking client for the Radarr v3 API.
 #[derive(Clone, Debug)]
 pub struct Client {
-    http: HttpClient,
+    read_http: HttpClient,
+    write_http: HttpClient,
     api_base: Url,
     api_token: HeaderValue,
 }
@@ -41,7 +42,7 @@ impl Client {
     /// Adds a movie using a validated payload.
     pub fn add_movie(&self, movie: &AddMoviePayload) -> Result<(), Error> {
         let response = self
-            .http
+            .write_http
             .post(self.endpoint("movie")?)
             .header("X-Api-Key", self.api_token.clone())
             .json(movie)
@@ -49,7 +50,14 @@ impl Client {
         if !response.status().is_success() {
             return Err(api_error(response));
         }
-        let added: AddMovieResponse = response.json()?;
+        let status = response.status();
+        let body = response.text()?;
+        let added: AddMovieResponse =
+            serde_json::from_str(&body).map_err(|source| Error::InvalidAddResponse {
+                status,
+                body,
+                source,
+            })?;
         if added.id == 0 || added.tmdb_id != movie.tmdb_id() {
             return Err(Error::UnexpectedAddResponse {
                 expected_tmdb_id: movie.tmdb_id(),
@@ -69,7 +77,7 @@ impl Client {
         T: for<'de> Deserialize<'de>,
     {
         let response = self
-            .http
+            .read_http
             .get(url)
             .header("X-Api-Key", self.api_token.clone())
             .query(query)
@@ -137,12 +145,32 @@ impl ClientBuilder {
             base_url.set_path(&format!("{}/", base_url.path()));
         }
         let api_base = base_url.join("api/v3/")?;
-        let http = HttpClient::builder()
+        let read_http = HttpClient::builder().timeout(self.timeout).build()?;
+        let write_http = HttpClient::builder()
             .timeout(self.timeout)
-            .redirect(Policy::none())
+            .redirect(Policy::custom(|attempt| {
+                if attempt.previous().len() >= 10 {
+                    return attempt.error("too many redirects");
+                }
+                let Some(previous) = attempt.previous().last() else {
+                    return attempt.stop();
+                };
+                if previous.host_str() != attempt.url().host_str()
+                    || (previous.scheme() == "https" && attempt.url().scheme() != "https")
+                {
+                    return attempt.stop();
+                }
+                match attempt.status() {
+                    StatusCode::TEMPORARY_REDIRECT | StatusCode::PERMANENT_REDIRECT => {
+                        attempt.follow()
+                    }
+                    _ => attempt.stop(),
+                }
+            }))
             .build()?;
         Ok(Client {
-            http,
+            read_http,
+            write_http,
             api_base,
             api_token: HeaderValue::from_str(&token)?,
         })
@@ -156,8 +184,6 @@ mod tests {
         net::TcpListener,
         thread,
     };
-
-    use reqwest::StatusCode;
 
     use super::*;
 
@@ -230,8 +256,85 @@ mod tests {
         );
         let (base_url, request) = server(response);
 
-        assert!(client(base_url).add_movie(&payload()).is_err());
+        let error = client(base_url).add_movie(&payload()).unwrap_err();
+
+        assert!(matches!(error, Error::InvalidAddResponse { .. }));
         request.join().unwrap();
+    }
+
+    #[test]
+    fn add_movie_rejects_unconfirmed_resource() {
+        for body in [r#"{"id":0,"tmdbId":1091}"#, r#"{"id":42,"tmdbId":999}"#] {
+            let response = format!(
+                "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{body}",
+                body.len()
+            );
+            let (base_url, request) = server(response);
+
+            assert!(matches!(
+                client(base_url).add_movie(&payload()),
+                Err(Error::UnexpectedAddResponse { .. })
+            ));
+            request.join().unwrap();
+        }
+    }
+
+    #[test]
+    fn add_movie_follows_method_preserving_redirect() {
+        let body = r#"{"id":42,"tmdbId":1091}"#;
+        let response = format!(
+            "HTTP/1.1 201 Created\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{body}",
+            body.len()
+        );
+        let (destination_url, destination_request) = server(response);
+        let response = format!(
+            "HTTP/1.1 308 Permanent Redirect\r\nLocation: {destination_url}/api/v3/movie\r\nContent-Length: 0\r\nConnection: close\r\n\r\n"
+        );
+        let (base_url, redirect_request) = server(response);
+
+        client(base_url).add_movie(&payload()).unwrap();
+
+        assert!(
+            redirect_request
+                .join()
+                .unwrap()
+                .starts_with("POST /api/v3/movie ")
+        );
+        assert!(
+            destination_request
+                .join()
+                .unwrap()
+                .starts_with("POST /api/v3/movie ")
+        );
+    }
+
+    #[test]
+    fn searches_follow_redirects() {
+        let body = "[]";
+        let response = format!(
+            "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{body}",
+            body.len()
+        );
+        let (destination_url, destination_request) = server(response);
+        let response = format!(
+            "HTTP/1.1 301 Moved Permanently\r\nLocation: {destination_url}/api/v3/movie/lookup?term=The+Thing\r\nContent-Length: 0\r\nConnection: close\r\n\r\n"
+        );
+        let (base_url, redirect_request) = server(response);
+
+        assert!(client(base_url).search("The Thing").unwrap().is_empty());
+
+        assert!(
+            redirect_request
+                .join()
+                .unwrap()
+                .starts_with("GET /api/v3/movie/lookup?term=The+Thing ")
+        );
+        assert!(
+            destination_request
+                .join()
+                .unwrap()
+                .starts_with("GET /api/v3/movie/lookup?term=The+Thing ")
+        );
     }
 
     #[test]
