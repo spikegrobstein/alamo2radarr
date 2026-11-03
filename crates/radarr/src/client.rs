@@ -1,15 +1,23 @@
 use std::time::Duration;
 
-use reqwest::{blocking::Client as HttpClient, header::HeaderValue};
+use reqwest::{StatusCode, blocking::Client as HttpClient, header::HeaderValue, redirect::Policy};
 use serde::Deserialize;
 use url::Url;
 
 use crate::{AddMoviePayload, Error, RootFolder, SearchResult};
 
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct AddMovieResponse {
+    id: u32,
+    tmdb_id: u32,
+}
+
 /// A blocking client for the Radarr v3 API.
 #[derive(Clone, Debug)]
 pub struct Client {
-    http: HttpClient,
+    read_http: HttpClient,
+    write_http: HttpClient,
     api_base: Url,
     api_token: HeaderValue,
 }
@@ -34,15 +42,30 @@ impl Client {
     /// Adds a movie using a validated payload.
     pub fn add_movie(&self, movie: &AddMoviePayload) -> Result<(), Error> {
         let response = self
-            .http
+            .write_http
             .post(self.endpoint("movie")?)
             .header("X-Api-Key", self.api_token.clone())
             .json(movie)
             .send()?;
-        if response.status().is_success() {
-            return Ok(());
+        if !response.status().is_success() {
+            return Err(api_error(response));
         }
-        Err(api_error(response))
+        let status = response.status();
+        let body = response.text()?;
+        let added: AddMovieResponse =
+            serde_json::from_str(&body).map_err(|source| Error::InvalidAddResponse {
+                status,
+                body,
+                source,
+            })?;
+        if added.id == 0 || added.tmdb_id != movie.tmdb_id() {
+            return Err(Error::UnexpectedAddResponse {
+                expected_tmdb_id: movie.tmdb_id(),
+                actual_tmdb_id: added.tmdb_id,
+                id: added.id,
+            });
+        }
+        Ok(())
     }
 
     fn endpoint(&self, path: &str) -> Result<Url, Error> {
@@ -54,7 +77,7 @@ impl Client {
         T: for<'de> Deserialize<'de>,
     {
         let response = self
-            .http
+            .read_http
             .get(url)
             .header("X-Api-Key", self.api_token.clone())
             .query(query)
@@ -122,11 +145,208 @@ impl ClientBuilder {
             base_url.set_path(&format!("{}/", base_url.path()));
         }
         let api_base = base_url.join("api/v3/")?;
-        let http = HttpClient::builder().timeout(self.timeout).build()?;
+        let read_http = HttpClient::builder().timeout(self.timeout).build()?;
+        let write_http = HttpClient::builder()
+            .timeout(self.timeout)
+            .redirect(Policy::custom(|attempt| {
+                if attempt.previous().len() >= 10 {
+                    return attempt.error("too many redirects");
+                }
+                let Some(previous) = attempt.previous().last() else {
+                    return attempt.stop();
+                };
+                if previous.host_str() != attempt.url().host_str()
+                    || (previous.scheme() == "https" && attempt.url().scheme() != "https")
+                {
+                    return attempt.stop();
+                }
+                match attempt.status() {
+                    StatusCode::TEMPORARY_REDIRECT | StatusCode::PERMANENT_REDIRECT => {
+                        attempt.follow()
+                    }
+                    _ => attempt.stop(),
+                }
+            }))
+            .build()?;
         Ok(Client {
-            http,
+            read_http,
+            write_http,
             api_base,
             api_token: HeaderValue::from_str(&token)?,
         })
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use std::{
+        io::{Read, Write},
+        net::TcpListener,
+        thread,
+    };
+
+    use super::*;
+
+    fn movie() -> SearchResult {
+        SearchResult {
+            id: 0,
+            title: "The Thing".into(),
+            alternate_titles: vec![],
+            year: 1982,
+            tmdb_id: 1091,
+            imdb_id: Some("tt0084787".into()),
+            runtime: Some(109),
+            title_slug: "the-thing-1982".into(),
+            images: vec![],
+            monitored: false,
+            movie_file: None,
+        }
+    }
+
+    fn payload() -> AddMoviePayload {
+        AddMoviePayload::builder(&movie())
+            .root_folder_path("/movies")
+            .build()
+            .unwrap()
+    }
+
+    fn server(response: impl Into<String>) -> (String, thread::JoinHandle<String>) {
+        let listener = TcpListener::bind("127.0.0.1:0").unwrap();
+        let address = listener.local_addr().unwrap();
+        let response = response.into();
+        let handle = thread::spawn(move || {
+            let (mut stream, _) = listener.accept().unwrap();
+            let mut bytes = [0; 8192];
+            let length = stream.read(&mut bytes).unwrap();
+            let request = String::from_utf8_lossy(&bytes[..length]).into_owned();
+            stream.write_all(response.as_bytes()).unwrap();
+            request
+        });
+        (format!("http://{address}"), handle)
+    }
+
+    fn client(base_url: String) -> Client {
+        Client::builder()
+            .base_url(base_url)
+            .api_token("secret")
+            .build()
+            .unwrap()
+    }
+
+    #[test]
+    fn add_movie_rejects_redirects() {
+        let (base_url, request) = server(
+            "HTTP/1.1 301 Moved Permanently\r\nLocation: https://radarr.example.test/api/v3/movie\r\nContent-Length: 0\r\nConnection: close\r\n\r\n",
+        );
+
+        let error = client(base_url).add_movie(&payload()).unwrap_err();
+
+        assert!(
+            matches!(error, Error::Api { status, .. } if status == StatusCode::MOVED_PERMANENTLY)
+        );
+        assert!(request.join().unwrap().starts_with("POST /api/v3/movie "));
+    }
+
+    #[test]
+    fn add_movie_rejects_success_without_added_movie() {
+        let body = "[]";
+        let response = format!(
+            "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{body}",
+            body.len()
+        );
+        let (base_url, request) = server(response);
+
+        let error = client(base_url).add_movie(&payload()).unwrap_err();
+
+        assert!(matches!(error, Error::InvalidAddResponse { .. }));
+        request.join().unwrap();
+    }
+
+    #[test]
+    fn add_movie_rejects_unconfirmed_resource() {
+        for body in [r#"{"id":0,"tmdbId":1091}"#, r#"{"id":42,"tmdbId":999}"#] {
+            let response = format!(
+                "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{body}",
+                body.len()
+            );
+            let (base_url, request) = server(response);
+
+            assert!(matches!(
+                client(base_url).add_movie(&payload()),
+                Err(Error::UnexpectedAddResponse { .. })
+            ));
+            request.join().unwrap();
+        }
+    }
+
+    #[test]
+    fn add_movie_follows_method_preserving_redirect() {
+        let body = r#"{"id":42,"tmdbId":1091}"#;
+        let response = format!(
+            "HTTP/1.1 201 Created\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{body}",
+            body.len()
+        );
+        let (destination_url, destination_request) = server(response);
+        let response = format!(
+            "HTTP/1.1 308 Permanent Redirect\r\nLocation: {destination_url}/api/v3/movie\r\nContent-Length: 0\r\nConnection: close\r\n\r\n"
+        );
+        let (base_url, redirect_request) = server(response);
+
+        client(base_url).add_movie(&payload()).unwrap();
+
+        assert!(
+            redirect_request
+                .join()
+                .unwrap()
+                .starts_with("POST /api/v3/movie ")
+        );
+        assert!(
+            destination_request
+                .join()
+                .unwrap()
+                .starts_with("POST /api/v3/movie ")
+        );
+    }
+
+    #[test]
+    fn searches_follow_redirects() {
+        let body = "[]";
+        let response = format!(
+            "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{body}",
+            body.len()
+        );
+        let (destination_url, destination_request) = server(response);
+        let response = format!(
+            "HTTP/1.1 301 Moved Permanently\r\nLocation: {destination_url}/api/v3/movie/lookup?term=The+Thing\r\nContent-Length: 0\r\nConnection: close\r\n\r\n"
+        );
+        let (base_url, redirect_request) = server(response);
+
+        assert!(client(base_url).search("The Thing").unwrap().is_empty());
+
+        assert!(
+            redirect_request
+                .join()
+                .unwrap()
+                .starts_with("GET /api/v3/movie/lookup?term=The+Thing ")
+        );
+        assert!(
+            destination_request
+                .join()
+                .unwrap()
+                .starts_with("GET /api/v3/movie/lookup?term=The+Thing ")
+        );
+    }
+
+    #[test]
+    fn add_movie_accepts_confirmed_radarr_resource() {
+        let body = r#"{"id":42,"tmdbId":1091}"#;
+        let response = format!(
+            "HTTP/1.1 201 Created\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{body}",
+            body.len()
+        );
+        let (base_url, request) = server(response);
+
+        client(base_url).add_movie(&payload()).unwrap();
+        request.join().unwrap();
     }
 }

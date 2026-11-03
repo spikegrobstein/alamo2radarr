@@ -37,6 +37,10 @@ impl AddMoviePayload {
             search_for_movie: true,
         }
     }
+
+    pub(crate) fn tmdb_id(&self) -> u32 {
+        self.tmdb_id
+    }
 }
 
 /// Builds and validates an [`AddMoviePayload`].
